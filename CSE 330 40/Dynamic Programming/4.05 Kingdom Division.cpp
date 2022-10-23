@@ -1,76 +1,56 @@
+#!/bin/python3
 
-#include <map>
-#include <set>
-#include <list>
-#include <cmath>
-#include <ctime>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <string>
-#include <bitset>
-#include <cstdio>
-#include <limits>
-#include <vector>
-#include <climits>
-#include <cstring>
-#include <cstdlib>
-#include <fstream>
-#include <numeric>
-#include <sstream>
-#include <iostream>
-#include <algorithm>
-#include <unordered_map>
+mod = 1000000007
+num_cities = int(input().strip())
 
-#define MOD 1000000007
-#define MAXN 100010
+roads = [None]+[list() for _ in range(num_cities)]
+child = [True] * (num_cities+1)
 
-using namespace std;
-
-typedef long long ll;
-typedef vector < int > vi;
-
-ll dp[MAXN][2];
-vector < vi > adj;
-
-void Solve(int node, int isdiff, int pre) {
-    if (dp[node][isdiff] != -1LL) return;
+for _ in range(num_cities-1):
+    u,v = [int(x) for x in input().split()]
+    roads[u].append(v)
+    roads[v].append(u)
     
-    for (int i=0; i<adj[node].size(); i++) if (adj[node][i] != pre) {
-        Solve(adj[node][i], 0, node);
-        Solve(adj[node][i], 1, node);
-    }
-    
-    ll retval = 1LL;
-    for (int i=0; i<adj[node].size(); i++) if (adj[node][i] != pre)
-        retval = (retval * (dp[adj[node][i]][1] + dp[adj[node][i]][0])%MOD)%MOD;
-    
-    ll del = 0LL;
-    if (isdiff) {
-        del = 1LL;
-        for (int i=0; i<adj[node].size(); i++) if (adj[node][i] != pre)
-            del = (del * (dp[adj[node][i]][1])%MOD)%MOD;
-    }
-    
-    retval = (retval + MOD - del)%MOD;
-    
-    dp[node][isdiff] = retval;
-}
 
-int main(){
-    memset(dp, -1, sizeof dp);
-    int n;
-    cin >> n;
-    adj.assign(n+2, vi());
-    for(int a0 = 0; a0 < n-1; a0++){
-        int u;
-        int v;
-        cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-    Solve(1, 1, -1);
-    cout << (dp[1][1]+dp[1][1])%MOD << endl;
-    return 0;
-}
+
+todo = [1]
+i = 0
+
+while i < len(todo):
+    c = todo[i]
+    child[c] = False
+    for j in roads[c]:
+        if child[j]:
+            todo.append(j)
+    i += 1
+
+
+combos = [[-1,-1]] * (num_cities+1)
+
+for c in reversed(todo):
+    children = [combos[x] for x in roads[c] if combos[x] != [-1,-1]]
+    if not children:
+        combos[c] = [0,1]
+        continue
+    slaves = sum(1 for x in children if x[0]==0)
+    
+    prod = 1
+    for cc in children:
+        prod = (prod * sum(cc)) % mod
+    
+    unfree = 1
+    
+    for cc in children:
+        haf = cc[0]
+        if 1 & haf:
+            haf += mod
+        haf = haf >> 1
+        unfree = (unfree * haf) % mod
+        
+    free = (mod + mod +((prod-unfree)*2)) % mod
+    
+    combos[c] = [free,unfree]
+    
+    
+print(combos[1][0])
 
