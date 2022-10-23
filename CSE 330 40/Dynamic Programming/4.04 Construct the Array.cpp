@@ -1,39 +1,40 @@
+#!/bin/python3
 
-#include <bits/stdc++.h>
+import math
+import os
+import random
+import re
+import sys
 
-using namespace std;
+#
+# Complete the 'countArray' function below.
+#
+# The function is expected to return a LONG_INTEGER.
+# The function accepts following parameters:
+#  1. INTEGER n
+#  2. INTEGER k
+#  3. INTEGER x
+#
 
-typedef long long ll;
+def countArray(n, k, x):
+    d, s = 1, 0
+    for i in range(2, n):
+        d, s = (k - 2) * d + s, (k - 1) * d
+    return d if x != 1 else s
 
-const int mod = 1000000007;
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-int Inv(int a)
-{
-    int res = 1;
-    int p = mod - 2;
-    while (p) {
-        if (p & 1) res = ll(res) * a % mod;
-        p >>= 1; a = ll(a) * a % mod;
-    }
-    return res;
-}
+    first_multiple_input = input().rstrip().split()
 
-int main() {
-    int n;
-    int k;
-    int x;
-    cin >> n >> k >> x;
-    int res1 = 1, res0 = 0;
-    for (int i = 1; i < n; i++) {
-        int nres1 = res0;
-        int nres0 = (ll(res1) * (k - 1) + ll(res0) * (k - 2)) % mod;
-        res1 = nres1; res0 = nres0;
-    }
-    if (x == 1) printf("%d\n", res1);
-    else {
-        int res = ll(res0) * Inv(k - 1) % mod;
-        printf("%d\n", res);
-    }
-    return 0;
-}
+    n = int(first_multiple_input[0])
 
+    k = int(first_multiple_input[1])
+
+    x = int(first_multiple_input[2])
+
+    answer = countArray(n, k, x)
+
+    fptr.write(str(answer) + '\n')
+
+    fptr.close()
