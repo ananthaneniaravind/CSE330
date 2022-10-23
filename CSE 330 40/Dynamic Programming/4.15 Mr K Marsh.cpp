@@ -1,96 +1,57 @@
-#include <cmath>
-#include <cstdio>
-#include <vector>
-#include <iostream>
-#include <algorithm>
-using namespace std;
-int main()
-{
-    int m,n,c=0;
-    cin>>m>>n;
-    char A[500][500];
-    int col[500][500]={0,0},row[500][500]={0,0};
-    for(int i=0;i<m;i++)
-    {
-        for(int j=0;j<n;j++)
-        {
-            cin>>A[i][j];
-        }
-    }
-    for(int j=0;j<n;j++)
-    {
-        c=0;
-        for(int i=m-1;i>=0;i--)
-        {
-            if(A[i][j]=='x')
-            {
-                c=0;
-                col[i][j]=c;
-            }
-            else
-            {
-                col[i][j]=c;
-                c++;
-            }
-        }
-    }
-    for(int i=0;i<m;i++)
-    {
-        c=0;
-        for(int j=n-1;j>=0;j--)
-        {
-            if(A[i][j]=='x')
-            {
-                c=0;
-                row[i][j]=c;
-            }
-            else
-            {
-                row[i][j]=c;
-                c++;
-            }
-        }
-    }
-    /*for(int i=0;i<m;i++)
-    {
-        for(int j=0;j<n;j++)
-        {
-            cout<<row[i][j]<<" ";
-        }
-        cout<<"\n";
-    }
-    cout<<"\n";
-    for(int i=0;i<m;i++)
-    {
-        for(int j=0;j<n;j++)
-        {
-            cout<<col[i][j]<<" ";
-        }
-        cout<<"\n";
-    }*/
-    int ans=0;
-    for(int i=0;i<m;i++)
-    {
-        for(int j=0;j<n;j++)
-        {
-            int k,l,lim=row[i][j],mincol;
-            for(k=1;k<=lim;k++)
-            {
-                mincol=min(col[i][j],col[i][j+k]);
-                for(l=mincol;l>=1;l--)
-                {
-                    if(row[i+l][j]>=k)
-                        break;
-                }
-                if(l>0)
-                    ans=max(ans,2*(l+k));
-            }
-        }
-    }
-    if(ans>0)
-        cout<<ans;
-    else
-        cout<<"impossible";
-    return 0;
-}
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'kMarsh' function below.
+#
+# The function accepts STRING_ARRAY grid as parameter.
+#
+
+def kMarsh(grid):
+    # Write your code here
+    rows = len(grid)
+    cols = len(grid[0])
+    up = [[0] * cols for _ in range(rows)]
+    left = [[0] * cols for _ in range(rows)]
+    for i in range(rows):
+        for j in range(cols):
+            if j > 0:
+                left[i][j] = left[i][j - 1] + 1 if grid[i][j - 1] != 'x' else 0
+            if i > 0:
+                up[i][j] = up[i - 1][j] + 1 if grid[i - 1][j] != 'x' else 0
+    max_perimeter = 0
+    for i in range(1, rows):
+        for j in range(1, cols):
+            if grid[i][j] != 'x':
+                a = i - up[i][j]
+                b = 0
+                while a < i and 2 * (i - a) + 2 * (j - b) > max_perimeter:
+                    b = max(j - left[a][j], j - left[i][j])
+                    while up[i][b] < i - a and b < j and 2 * (i - a) + 2 * (j - b) > max_perimeter:
+                        b += 1
+                    if b < j and left[i][j] >= j - b and grid[a][b] != 'x':
+                        max_perimeter = max(max_perimeter, 2 * (i - a) + 2 * (j - b))
+                    a += 1
+                    b = 0
+    print(max_perimeter if max_perimeter > 0 else 'impossible')
+
+if __name__ == '__main__':
+    first_multiple_input = input().rstrip().split()
+
+    m = int(first_multiple_input[0])
+
+    n = int(first_multiple_input[1])
+
+    grid = []
+
+    for _ in range(m):
+        grid_item = input()
+        grid.append(grid_item)
+
+    kMarsh(grid)
 
