@@ -1,31 +1,30 @@
-#include <bits/stdc++.h>
-using namespace std;
+def recurse(a,b):
+    if len(a) < len(b):
+        return False
+    if len(b) == 0:
+        return a.islower()
+    if a.upper() == b:
+        return True
+    if a[0].isupper():
+        if a[0] == b[0]:
+            return recurse(a[1:],b[1:])
+        else:
+            return False
+    else:
+        if a[0].upper() != b[0]:
+            return recurse(a[1:],b)
+        else:
+            return (recurse(a[1:],b[1:]) or recurse(a[1:],b))
 
-const int maxN = 1000 + 100; 
+def solveProblem():
+    a = input()
+    b = input()
+    x = recurse(a,b)
+    if x:
+        print('YES')
+    else:
+        print('NO')
 
-bool dp[maxN][maxN]; 
-
-inline void solve() { 
-    string a,b; cin >> a >> b; 
-    memset( dp , 0 , sizeof dp ); 
-    int n = a.size() , m = b.size(); 
-    dp[0][0] = true; 
-    for( int i = 1 ; i <= n ; i++ ) 
-        for( int j = 0 ; j <= m ; j++ ) { 
-            if( j && dp[i-1][j-1] && toupper(a[i-1]) == b[j-1] ) 
-               dp[i][j] = true; 
-            if( dp[i-1][j] && islower(a[i-1]) ) 
-                dp[i][j] = true; 
-        }
-    if( dp[n][m] ) 
-        cout << "YES" << endl;
-    else
-        cout << "NO" << endl;
-}
-
-int main() { 
-    int t; cin >> t; 
-    while( t-- ) 
-        solve(); 
-}
-
+T = int(input())
+for t in range(T):
+    solveProblem()
