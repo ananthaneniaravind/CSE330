@@ -1,30 +1,18 @@
-#include<bits/stdc++.h>
-using namespace std;
-int main()
-{
-	int t;
-	scanf("%d",&t);
-	while(t--)
-	{
-		long long int n,a[50005],i,idx,b[50005],sum=0;
-		scanf("%lld",&n);
-		for(i=1;i<=n;i++)
-		{
-			scanf("%lld",&a[i]);
-		}
-		idx=n;
-		b[n]=n;
-		for(i=n-1;i>0;i--)
-		{
-			if(a[idx]<a[i])
-			idx=i;
-			b[i]=idx;
-		}
-		for(i=1;i<=n;i++)
-		{
-			if((a[b[i]]-a[i])>=0)
-			sum+=(a[b[i]]-a[i]);
-		}
-		cout<<sum<<endl;
-	}
-}
+#!/bin/python3
+
+test=int(input())
+for i in range(test):
+    n=int(input())
+    a=list(map(int,input().split()))
+    c=0
+    i=len(a)-1
+    while(i>=0):
+        d=a[i]
+        l=i
+        p=0
+        while(a[i]<=d and i>=0):
+            p+=a[i]
+            i-=1
+        c+=(l-i)*a[l]-p
+        continue
+    print (c)
