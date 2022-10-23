@@ -1,61 +1,46 @@
-#include <iostream>
-#include <cstdio>
-#include <algorithm>
-#include <vector>
-#include <cmath>
-using namespace std;
-#define For(i,a,b) for(int i=a;i<=b;i++)
-#define Ford(i,a,b) for(int i=a;i>=b;i--)
-#define fi first
-#define se second
-#define sr(x) (int)x.size()
-#define BUG(x) {cout << #x << " = " << x << endl;}
-#define PR(x,a,b) {cout << #x << " = "; For(_,a,b) cout << x[_] << ' '; cout << endl;}
-#define Bit(s,i) (((s)&(1<<(i)))>0)
-#define Two(x) (1<<(x))
-const int MOD = 1000000007;
-const int nmax = 1000100;
-const double E = 1e-8;
-const double PI = acos(-1);
-typedef long long LL;
-typedef pair<int,int> pii;
-int N,m,stest;
+#!/bin/python3
 
-LL s[nmax], n[nmax];
-LL a, f[nmax];
-LL l[nmax];
+import math
+import os
+import random
+import re
+import sys
 
-int main() {
-  //freopen("input.txt","r",stdin);
-  s[0] = 0;
-  n[0] = 1;
-  l[0] = 0;
-  f[0] = 0;
-  cin >> N;
-  For(i,1,N) {
-    cin >> a;
+#
+# Complete the 'hackerrankCity' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts INTEGER_ARRAY A as parameter.
+#
 
-    n[i] = (4 * n[i-1] + 2) % MOD;
+def hackerrankCity(A):
+    # Write your code here
+    n=len(A)
+    N=1
+    dist=0
+    sumd=A[0]*11#sum of all distances to the right bottom corner points
+    dp=29*A[0]#dp is the sum of all distances
+    for i in range(1,n):
+        N=N*4+2
+        dp=4*dp+sumd*(12*N+8)+A[i]*(16*N**2+12*N+1)
+        dist=2*dist+3*A[i-1]
+        sumd=4*sumd+A[i]*(8*N+3)+(3*N+2)*dist
+        dp%=(10**9+7)
+        sumd%=(10**9+7)
+        N%=(10**9+7)
+        dist%=(10**9+7)
+    return dp
 
-    l[i] = ( 2 * l[i-1] + 3 * a ) % MOD;
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-    f[i] = (
-      f[i-1] +
-      l[i-1] + a +
-      (f[i-1] + ( 2 * a + l[i-1] ) * n[i-1]) % MOD +
-      l[i-1] + 2 * a +
-      ( f[i-1] + ( 3 * a + l[i-1] ) * n[i-1] ) * 2 % MOD
-    ) % MOD;
+    A_count = int(input().strip())
 
-    s[i] = (
-      4 * s[i-1] +
-      ( f[i-1] * n[i-1] * 2 % MOD + n[i-1] * n[i-1] * 2 % MOD * a % MOD) * 2 +
-      ( f[i-1] * n[i-1] * 2 % MOD + n[i-1] * n[i-1] * 3 % MOD * a % MOD) * 4 +
-      ( f[i-1] + a * n[i-1] ) * 4 +
-      ( f[i-1] + a * 2 * n[i-1] ) * 4 +
-      a
-    ) % MOD;
-  }
-  cout << s[N] << endl;
-  return 0;
-}
+    A = list(map(int, input().rstrip().split()))
+
+    result = hackerrankCity(A)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
