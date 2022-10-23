@@ -1,39 +1,29 @@
-#include <cmath>
-#include <cstdio>
-#include <vector>
-#include <iostream>
-#include <algorithm>
-using namespace std;
+n, k = map(int, input().split())
 
-typedef long long ll;
+if 2*k > n:
+    k = n - k
 
-const ll Inf = 4000000000000000000;
-const int Maxn = 3005;
+a = sorted(map(int, input().split()))
 
-int n, k;
-int a[Maxn];
-ll dp[Maxn][Maxn];
+# create dp
 
-int main() {
-    scanf("%d %d", &n, &k);
-    for (int i = 0; i < n; i++)
-        scanf("%d", &a[i]);
-    sort(a, a + n);
-    fill((ll*)dp, (ll*)dp + Maxn * Maxn, Inf);
-    dp[0][0] = 0;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j <= i && j <= k; j++) if (dp[i][j] < Inf) {
-            int my = j, his = i - j;
-            if (my < k) {
-                ll add = ll(a[i]) * (his - (n - k - his));
-                dp[i + 1][j + 1] = min(dp[i + 1][j + 1], dp[i][j] + add);
-            }
-            if (his < n - k) {
-                ll add = ll(a[i]) * (my - (k - my));
-                dp[i + 1][j] = min(dp[i + 1][j], dp[i][j] + add);
-            }
-        }
-    printf("%lld\n", dp[n][k]);
-    return 0;
-}
+dp = [[float('inf') for i in range(0, n + 1)] for j in range(0, n + 1)]
+
+dp[0][0] = 0
+
+for i in range(0, n):
+    for j in range(0, i + 1):
+        if i > k and i-j > n-k:
+            continue
+        to_li = dp[i][j] + a[i] * (i - j - (n - k - (i - j)))
+        to_lu = dp[i][j] + a[i] * (j - (k - j))
+        # to Li
+        if dp[i+1][j+1] > to_li:
+            dp[i+1][j+1] = to_li
+        
+        # to Lu
+        if dp[i+1][j] > to_lu:
+            dp[i+1][j] = to_lu
+
+print(dp[n][k])
 
