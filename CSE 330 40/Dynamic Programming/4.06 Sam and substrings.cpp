@@ -1,27 +1,37 @@
-#include <bits/stdc++.h>
-using namespace std;
-long long mod = 1000000007;
+#!/bin/python3
 
-int main() {
-    string s;
-    cin >> s;
-    long long pw[s.length() + 1];
-    pw[0] = 1;
-    for (int i = 1; i <= (int)s.length(); ++i) {
-        pw[i] = pw[i - 1] * 10 % mod;
-    }
-    long long sum[s.length() + 1];
-    sum[0] = pw[0];
-    for (int i = 1; i <= (int)s.length(); ++i) {
-        sum[i] = sum[i - 1] + pw[i];
-        sum[i] %= mod;
-    }
-    long long ans = 0;
-    int n = s.length();
-    for (int i = 0; i < n; ++i) {
-        ans += (s[i] - '0') * (i + 1) * sum[n - 1 - i];
-        ans %= mod;
-    }
-    cout << ans << endl;
-    return 0;
-}
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'substrings' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts STRING n as parameter.
+#
+
+def substrings(n):
+    # Write your code here
+    s = 0
+    prev_sum = 0
+    
+    for i, d in enumerate(n):
+        s_ = prev_sum * 10 + (i + 1) * int(d)
+        s += s_
+        prev_sum = s_
+    return s % (10 ** 9 + 7)
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    n = input()
+
+    result = substrings(n)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+
