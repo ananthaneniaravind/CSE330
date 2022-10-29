@@ -1,0 +1,26 @@
+def partition(array,low,high):
+    i=low-1
+    pi=high
+    for j in range(low,high):
+        if array[j]<=array[pi]:
+            
+            i+=1
+            (array[i],array[j]) = (array[j],array[i])
+    (array[i+1],array[high]) = (array[high],array[i+1])
+    for z in array:
+        print(z,end=" ")
+    return i+1
+    
+def beforepartition(array,low,high):
+    if low<high:
+        pi_1 = partition(array,low,high)
+        beforepartition(array,low,pi_1-1)
+        beforepartition(array,pi_1+1,high)
+
+
+n=int(input())
+array = [int(x) for x in input().split()]
+low =0
+high= len(array)-1
+beforepartition(array,low,high)
+
